@@ -4,8 +4,7 @@ scala:
 deploy:
   provider: heroku
   api_key:
-    secure: AtFmzef6aZ/aLIWQdzXRRkxFwoELP5vwjMNvCsEWXbNA70e76Hkc/xBrvWK/gNe7oaYxc7rrYPoDaDCXf2qLkibES2fdpSmKwMI/yVaitPd3WT/rP5hN1doVWjVQkohQN6IBd+8aH2PZmox4Dru6CQLrze5dNQKRmdcCv2RMi6E=
-  strategy: git
+    secure: lJkGZWAHUTXF+Mi5sE+upm7hHY5VddU//fSxItV//tlpc+CRb8gJltxH7Dx+5qoi0TQhY9zLmFwYdPu7KBvz0dsvcqZtSOTBdrVvBQStYFyjlD2fuIPUnvl4SA+HhHLkApgF/205EdOHkEM0XA93J+1W6uluBmL0E3BF14QYWk8=
   app: hall-web-hook-integrations
   on:
     repo: drdamour/hall-web-hook-integrations
