@@ -4,7 +4,7 @@ scala:
 deploy:
   provider: heroku
   api_key:
-    secure: lJkGZWAHUTXF+Mi5sE+upm7hHY5VddU//fSxItV//tlpc+CRb8gJltxH7Dx+5qoi0TQhY9zLmFwYdPu7KBvz0dsvcqZtSOTBdrVvBQStYFyjlD2fuIPUnvl4SA+HhHLkApgF/205EdOHkEM0XA93J+1W6uluBmL0E3BF14QYWk8=
+    secure: hUxppngfpBsAl0jafG0GF4Z6O92spf0GraQ7rcQAi2RWWNUnl9FJaMvtGaMLfZcXq56r6OzCHLHFJQRnDU/uY5ZzZ2rVUG1o65jLuh5zZ3rHX8kvOsIQsZneVNsdRiO/1dXKBLuoC68VJUC6qS4anXNMu6mO2Bu4qGtoCm4Z+LE=
   app: hall-hooks
   on:
     repo: drdamour/hall-hooks
