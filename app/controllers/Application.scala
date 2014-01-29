@@ -1,0 +1,69 @@
+package controllers
+
+import play.api._
+import play.api.mvc._
+import play.api.data._
+import play.api.data.Forms._
+import play.api.i18n.Messages
+import play.api.libs.ws._
+import scala.concurrent.Future
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.libs.json._
+
+case class HallMessage(roomToken:String, title:String, message:String, picture:Option[String])
+
+object Application extends Controller {
+
+  val chatForm = Form(
+    mapping(
+      "roomToken" -> nonEmptyText(32, 32),
+      "title" -> nonEmptyText,
+      "message" -> nonEmptyText,
+      "picture" -> optional(text)
+    )(HallMessage.apply)(HallMessage.unapply)
+  )
+
+
+  def index = Action { implicit request =>
+    Ok(views.html.index(chatForm))
+  }
+
+  def sendMessage = Action.async { implicit request =>
+
+    chatForm.bindFromRequest().fold(
+      badForm => {
+        Future(BadRequest(views.html.index(badForm)))
+      },
+      validMessage => {
+        sendMessageToHall(validMessage).map { response =>
+          //TODO: any response other than success should be thrown down to recover
+
+          Redirect(routes.Application.index()).flashing("success-message" -> Messages("notification.messageSentSuccessfully"))
+        }
+        .recover {
+          case e: Exception =>
+            //If it didn't work, but the message was valid, re-populate the form and try again
+            val f = Flash(Map("failure-message" -> "go to hell"))
+            //I don't get how to override the implicit flash here, so i have to explicitly pass it in...and i'm starting to see the flaw
+            //of having the view know about flash...need to find a better pattern..if there is one
+            BadRequest(views.html.index(chatForm.fill(validMessage))(f,lang))
+        }
+      }
+
+    )
+  }
+
+
+
+  //TODO: move to some command handler class
+  implicit val hallMessageRes = Json.format[HallMessage]
+  private def sendMessageToHall(message:HallMessage) = {
+    val hallBaseUrl = Play.current.configuration.getString("hall.hookEndpoint").get
+
+    WS.url(hallBaseUrl + message.roomToken).withHeaders("Content-Type" -> "application/json").post(
+      Json.toJson(message)
+    )
+
+  }
+
+}

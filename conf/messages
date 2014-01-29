@@ -1,0 +1,7 @@
+label.roomToken=Room Token:
+label.title=Title:
+label.message=Message:
+label.picture=Picture:
+
+notification.messageSentSuccessfully=Message Sent to Hall
+notification.messageFailedToSend=Failed to send message to Hall

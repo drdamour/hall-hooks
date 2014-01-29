@@ -1,0 +1,10 @@
+language: scala
+scala:
+- 2.10.3
+deploy:
+  provider: heroku
+  api_key:
+    secure: AtFmzef6aZ/aLIWQdzXRRkxFwoELP5vwjMNvCsEWXbNA70e76Hkc/xBrvWK/gNe7oaYxc7rrYPoDaDCXf2qLkibES2fdpSmKwMI/yVaitPd3WT/rP5hN1doVWjVQkohQN6IBd+8aH2PZmox4Dru6CQLrze5dNQKRmdcCv2RMi6E=
+  app: hall-web-hook-integrations
+  on:
+    repo: drdamour/hall-web-hook-integrations
