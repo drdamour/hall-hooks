@@ -1,0 +1,19 @@
+@(messageForm:Form[HallMessage])(implicit flash: play.api.mvc.Flash, lang: Lang)
+
+@import twirl.pimpForPlay._
+@import views.html.helper._
+@implicitFieldConstructor = @{ FieldConstructor( views.html.helper.bootstrap3.basicForm.inputFieldConstructor.f ) }
+
+@template(Messages("pageTitle.testFormPage")) {
+    <h1>@Messages("label.testFormHeader")</h1>
+    @form(routes.TestFormController.sendTestMessage){
+        @inputText(messageForm("roomToken"), '_label -> Messages("label.roomToken"), '_showConstraints -> false)
+        @inputText(messageForm("title"), '_label -> Messages("label.title"), '_showConstraints -> false)
+        @inputText(messageForm("message"), '_label -> Messages("label.message"), '_showConstraints -> false)
+        @inputText(messageForm("picture"), '_label -> Messages("label.picture"), '_showConstraints -> false)
+
+        <div class="actions">
+            <input type="submit" value="Send Message" class="btn btn-primary">
+        </div>
+    }
+}

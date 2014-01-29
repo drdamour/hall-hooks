@@ -26,14 +26,14 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="@routes.Application.index()">Hall Hooks</a>
+				<a class="navbar-brand" href="@routes.HomeController.index()">@Messages("navbar.mainTitle")</a>
 			</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<!-- see http://getbootstrap.com/components/#navbar -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-
+                    <li><a href="@routes.TestFormController.index()">@Messages("navbar.testForm")</a></li>
 				</ul>
 
 			</div><!-- /.navbar-collapse -->

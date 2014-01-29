@@ -1,3 +1,10 @@
+navbar.mainTitle=Hall Hooks
+navbar.testForm=Test Form
+
+pageTitle.testFormPage=Hall Message Test Form
+pageTitle.homePage=Hall Web Hook Integrations
+
+label.testFormHeader=Hall Message Test
 label.roomToken=Room Token:
 label.title=Title:
 label.message=Message:
