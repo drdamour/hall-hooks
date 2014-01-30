@@ -17,5 +17,4 @@ POST        /                                               controllers.TestForm
 
 #travis-ci integration
 GET         /travis-ci                                      controllers.TravisController.index
-POST        /travis-ci/buildnotification/                   controllers.TravisController.sendBuildStatusToHall(roomToken = "d982d854ba875b1a5229c0649ad4781e")
-POST        /travis-ci/buildnotification/{roomtoken}        controllers.TravisController.sendBuildStatusToHall(roomToken)
+POST        /travis-ci/buildnotification/:roomToken        controllers.TravisController.sendBuildStatusToHall(roomToken)

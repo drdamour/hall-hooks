@@ -42,7 +42,7 @@ trait TravisController {
     Redirect(routes.TravisController.index()).flashing("success-message" -> Messages("notification.messageSentSuccessfully"))
   }
 
-  //ripped from https://gist.github.com/svenfuchs/1225015
+  //originally ripped from https://gist.github.com/svenfuchs/1225015 but i found diff form what was really happening, so this
   val examplePayload =
     """
       |{

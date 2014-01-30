@@ -138,23 +138,23 @@ class TravisSpec extends Specification with Mockito  {
       val o = Json.fromJson[BuildMessage](json).get
 
       val expected = BuildMessage(
-        1,
-        "1",
+        17922525,
+        "13",
         0,
-        None,
-        None,
+        Some("2014-01-30T17:52:32Z"),
+        Some("2014-01-30T18:09:02Z"),
         "Passed",
-        "62aae5f70ceee39123ef",
+        "89df55e2cee1393d08790a291a59ee1055ed3547",
         "master",
-        "the commit message",
-        "https://github.com/svenfuchs/minimal/compare/master...develop",
-        "2011-11-11T11: 11: 11Z",
-        "Sven Fuchs",
-        "svenfuchs@artweb-design.de",
-        "Sven Fuchs",
-        "svenfuchs@artweb-design.de",
-        "http://somebuildurl",
-        Repository(1, "minimal", "svenfuchs", "http://github.com/svenfuchs/minimal")
+        "Fixed examples",
+        "https://github.com/drdamour/hall-hooks/compare/544ce058621d...89df55e2cee1",
+        "2014-01-30T17:49:37Z",
+        "drdamour",
+        "drdamour@gmail.com",
+        "drdamour",
+        "drdamour@gmail.com",
+        "https://travis-ci.org/drdamour/hall-hooks/builds/17922525",
+        Repository(1825929, "hall-hooks", "drdamour", "https://github.com/drdamour/hall-hooks")
       )
 
       o must beEqualTo(expected)
