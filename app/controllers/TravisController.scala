@@ -10,28 +10,26 @@ import models.HallMessage
 import play.api.i18n.Messages
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits._
+import scala.concurrent.Future
 
-case class TravisSimulation(request:String)
+case class TravisSimulation(roomToken:String, payload:String)
 
 trait TravisController {
   this:Controller with HallCommandHandlerSlice =>
 
-  def sendBuildStatusToHall(roomToken:String) = Action.async { implicit request =>
-
-    //Get payload param
-    val payloadJSON = request.body.asFormUrlEncoded.get("payload").head
-
-    //Log the payload message
-    Logger("application.controllers.TravisController").debug(payloadJSON)
-
+  private def doStuff(roomToken:String, payloadJSON:String) = {
     //Get the json from the form body
     val json = Json.parse(payloadJSON)
+
+    //TODO: check results of validation and error if it's bad
+    val validation = json.validate[BuildMessage]
 
     //turn it into the much beloved case classes
     val payload = Json.fromJson[BuildMessage](json).get
 
     //figure out what we want our message to be
     val messageText = payload match {
+      //TODO: is there a better way to match based on a single property of a case class?
       case p if p.status_message.toLowerCase == "pending" => s"""<a target="_blank" href="${payload.build_url}">Build ${payload.number}</a> for branch <a target="_blank" href="${payload.repository.url}/${payload.branch}" >${payload.branch}</a> <b>started</b> (<a target="_blank" href="${payload.compare_url}">${payload.commit.substring(0, 6)}</a> by ${payload.committer_name})"""
       case _ => s"""<a target="_blank" href="${payload.build_url}">Build ${payload.number}</a> for branch <a target="_blank" href="${payload.repository.url}/${payload.branch}" >${payload.branch}</a> completed with status <b>${payload.status_message.toUpperCase}</b> (<a target="_blank" href="${payload.compare_url}">${payload.commit.substring(0, 6)}</a> by ${payload.committer_name})"""
     }
@@ -48,8 +46,20 @@ trait TravisController {
     }.recover {
       case e: Exception =>
         BadRequest(e.getLocalizedMessage)
-    }
+    }  
+    
+  }
+  
+  def sendBuildStatusToHall(roomToken:String) = Action.async { implicit request =>
+    //TODO: add some verification against stuff being present or not
 
+    //Get payload param
+    val payloadJSON = request.body.asFormUrlEncoded.get("payload").head
+
+    //Log the payload message
+    Logger("application.controllers.TravisController").debug(payloadJSON)
+
+    doStuff(roomToken, payloadJSON)
 
   }
 
@@ -142,14 +152,26 @@ trait TravisController {
 
   val travisSimulationForm = Form(
     mapping(
+      "roomToken" -> nonEmptyText,
       "payload" -> nonEmptyText
     )(TravisSimulation.apply)(TravisSimulation.unapply)
   )
 
   def index = Action { implicit request =>
-    Ok(views.html.Travis.info(travisSimulationForm.fill(TravisSimulation(examplePayload))))
+    Ok(views.html.Travis.info(travisSimulationForm.fill(TravisSimulation("", examplePayload))))
   }
 
+  def runSimulation = Action.async { implicit request =>
+    travisSimulationForm.bindFromRequest().fold(
+      badForm => {
+        Future(BadRequest(views.html.Travis.info(badForm)))
+      },
+      validSimulation => {
+        doStuff(validSimulation.roomToken, validSimulation.payload)
+      }
+
+    )
+  }
 }
 
 object TravisController extends Controller with TravisController with HallCommandHandlerSlice

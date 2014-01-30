@@ -14,6 +14,7 @@ label.testForm.picture=Picture:
 
 label.travisSimulationForm.header=Simulate a Travis-CI Build Notification
 label.travisSimulationForm.payload=Payload
+label.travisSimulationForm.roomToken=Hall Room Token
 
 notification.messageSentSuccessfully=Message Sent to Hall
 notification.messageFailedToSend=Failed to send message to Hall

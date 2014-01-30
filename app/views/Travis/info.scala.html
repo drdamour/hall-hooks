@@ -6,9 +6,35 @@
 
 @template(Messages("pageTitle.travisInfo")) {
     <h1>Instructions</h1>
+    <p>Go to <a href="https://hall.com/docs/integrations/generic/">https://hall.com/docs/integrations/generic/</a> and get the room token that you wish to notify.  For this example suppose your token is 1234roomtoken.  Next, add the following configuration to your .travis.yml file:</p>
+
+    <pre><code>notifications:
+        webhooks:
+        urls:
+        - https://hall-hooks.herokuapp.com/travis-ci/travis-ci/buildnotification/1234roomtoken
+        on_start: true
+    </code></pre>
+
+    <p>Note: You can use the travis CLI tool to encrypt the url if you don't want to publish your room token (Hall hooks won't remember it)</p>
+
+    <pre><code>travis encrypt https://hall-hooks.herokuapp.com/travis-ci/travis-ci/buildnotification/1234roomtoken
+    </code></pre>
+
+    <p>and add the output to your .travis.yml like this:</p>
+
+    <pre><code>notifications:
+        webhooks:
+        urls:
+        - secure: ecryptedgobblygookFdEd857iwZpN2PAFMsNBAZQdcU9bu
+        on_start: true
+    </code></pre>
+
+    <p>Modify the hook configuration per <a href="http://docs.travis-ci.com/user/notifications/#Webhook-notification">http://docs.travis-ci.com/user/notifications/#Webhook-notification</a> you can send notes to multiple rooms by adding multiple urls to the urls section.</p>
+
 
     <h1>@Messages("label.travisSimulationForm.header")</h1>
-    @form(routes.TravisController.sendBuildStatusToHall("d982d854ba875b1a5229c0649ad4781e")){
+    @form(routes.TravisController.runSimulation){
+        @inputText(simulationForm("roomToken"), '_label -> Messages("label.travisSimulationForm.roomToken"), '_showConstraints -> false, 'rows -> 30)
         @textarea(simulationForm("payload"), '_label -> Messages("label.travisSimulationForm.payload"), '_showConstraints -> false, 'rows -> 30)
 
         <div class="actions">
