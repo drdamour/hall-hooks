@@ -8,3 +8,6 @@ deploy:
   app: hall-hooks
   on:
     repo: drdamour/hall-hooks
+notifications:
+  webhooks:
+    - https://hall-hooks.herokuapp.com/travis-ci/buildnotification/
