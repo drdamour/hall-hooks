@@ -1,14 +1,19 @@
 navbar.mainTitle=Hall Hooks
 navbar.testForm=Test Form
+navbar.travisCI=Travis-CI
 
 pageTitle.testFormPage=Hall Message Test Form
 pageTitle.homePage=Hall Web Hook Integrations
+pageTitle.travisInfo=Travis-CI Hook Information
 
-label.testFormHeader=Hall Message Test
-label.roomToken=Room Token:
-label.title=Title:
-label.message=Message:
-label.picture=Picture:
+label.testForm.header=Hall Message Test
+label.testForm.roomToken=Room Token:
+label.testForm.title=Title:
+label.testForm.message=Message:
+label.testForm.picture=Picture:
+
+label.travisTestForm.header=Simulate a Travis-CI Build Notification
+label.travisTestForm.payload=Payload
 
 notification.messageSentSuccessfully=Message Sent to Hall
 notification.messageFailedToSend=Failed to send message to Hall

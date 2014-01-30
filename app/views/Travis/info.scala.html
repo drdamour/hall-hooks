@@ -1,0 +1,19 @@
+@(testForm:Form[TravisTestFormData])(implicit flash: play.api.mvc.Flash, lang: Lang)
+
+@import twirl.pimpForPlay._
+@import views.html.helper._
+@implicitFieldConstructor = @{ FieldConstructor( views.html.helper.bootstrap3.basicForm.inputFieldConstructor.f ) }
+
+@template(Messages("pageTitle.travisInfo")) {
+    <h1>Instructions</h1>
+
+    <h1>@Messages("label.travisTestForm.header")</h1>
+    @form(routes.TravisController.sendBuildStatusToHall){
+        @textarea(testForm("payload"), '_label -> Messages("label.travisTestForm.payload"), '_showConstraints -> false, 'rows -> 30)
+
+        <div class="actions">
+            <input type="submit" value="Simulate Build Notification" class="btn btn-primary">
+        </div>
+    }
+
+}
