@@ -5,17 +5,33 @@ import hall.HallCommandHandlerSlice
 import play.api.data._
 import play.api.data.Forms._
 import play.api.libs.json.Json
+import models.Travis.BuildMessage
+import models.HallMessage
+import play.api.i18n.Messages
 
 case class TravisTestFormData(request:String)
 
 trait TravisController {
   this:Controller with HallCommandHandlerSlice =>
 
-  def sendBuildStatusToHall = Action { implicit request =>
+  def sendBuildStatusToHall(roomToken:String) = Action { implicit request =>
     //Get the json from the form body
     val json = Json.parse(request.body.asFormUrlEncoded.get("payload").head)
 
-    Ok("")
+    //turn it into the much beloved case classes
+    val o = Json.fromJson[BuildMessage](json).get
+
+    //figure out what we want our message to be
+    val hallMessage = HallMessage(
+      roomToken,
+      o.payload.repository.name + " project build status",
+      s"Build Number ${o.payload.number} fininshed with ${o.payload.status_message}",
+      None
+    )
+
+    sendMessage(hallMessage)
+
+    Redirect(routes.TravisController.index()).flashing("success-message" -> Messages("notification.messageSentSuccessfully"))
   }
 
   //ripped from https://gist.github.com/svenfuchs/1225015

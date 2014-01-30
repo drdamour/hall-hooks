@@ -8,7 +8,7 @@
     <h1>Instructions</h1>
 
     <h1>@Messages("label.travisTestForm.header")</h1>
-    @form(routes.TravisController.sendBuildStatusToHall){
+    @form(routes.TravisController.sendBuildStatusToHall("d982d854ba875b1a5229c0649ad4781e")){
         @textarea(testForm("payload"), '_label -> Messages("label.travisTestForm.payload"), '_showConstraints -> false, 'rows -> 30)
 
         <div class="actions">
