@@ -9,7 +9,7 @@ import models.Travis.BuildMessage
 import models.HallMessage
 import play.api.i18n.Messages
 
-case class TravisTestFormData(request:String)
+case class TravisSimulation(request:String)
 
 trait TravisController {
   this:Controller with HallCommandHandlerSlice =>
@@ -92,14 +92,14 @@ trait TravisController {
       |}
     """.stripMargin
 
-  val travisPayloadForm = Form(
+  val travisSimulationForm = Form(
     mapping(
       "payload" -> nonEmptyText
-    )(TravisTestFormData.apply)(TravisTestFormData.unapply)
+    )(TravisSimulation.apply)(TravisSimulation.unapply)
   )
 
   def index = Action { implicit request =>
-    Ok(views.html.Travis.info(travisPayloadForm.fill(TravisTestFormData(examplePayload))))
+    Ok(views.html.Travis.info(travisSimulationForm.fill(TravisSimulation(examplePayload))))
   }
 
 }
