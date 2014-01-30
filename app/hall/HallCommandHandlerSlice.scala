@@ -6,8 +6,11 @@ import play.api.libs.json._
 import models._
 import scala.concurrent.Future
 
+trait HallCommandHandler {
+  def sendMessage(message:HallMessage):Future[Response]
+}
 
-trait HallCommandHandlerSlice {
+trait HallCommandHandlerSlice extends HallCommandHandler {
 
   implicit val hallMessageRes = Json.format[HallMessage]
 

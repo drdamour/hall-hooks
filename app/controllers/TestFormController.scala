@@ -11,11 +11,11 @@ import play.api.libs.concurrent.Execution.Implicits._
 
 import scala.concurrent.Future
 import models._
-import hall.HallCommandHandlerSlice
+import hall._
 
 
 trait TestFormController {
-  this: Controller with HallCommandHandlerSlice =>
+  this: Controller with HallCommandHandler =>
 
   val chatForm = Form(
     mapping(
