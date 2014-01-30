@@ -17,8 +17,8 @@ object Repository {
 
 case class BuildMessage(
   id: Int,
-  number: Int,
-  status: Option[String], //what is this?
+  number: String,
+  status: Int, //what is this?
   started_at: Option[String], //this seems wrong
   finished_at: Option[String], //this seems wrong,
   status_message: String,
@@ -31,6 +31,7 @@ case class BuildMessage(
   committer_email: String,
   author_name: String,
   author_email: String,
+  build_url: String,
   repository: Repository
 )
 

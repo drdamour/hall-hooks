@@ -10,4 +10,5 @@ deploy:
     repo: drdamour/hall-hooks
 notifications:
   webhooks:
-    - https://hall-hooks.herokuapp.com/travis-ci/buildnotification/
+  	urls:
+    	- secure: "FdEd857iwZpN2PAFMsNBAZQdcU9buDHdiartFQA1wL08PPvee4xHHWefOuUS5Qr5QFt6n5ZzdUv7lYVr6eAQuBB7j+irMT7tvaRCf2k5Qg9qBP065CJrI5YzcLvjr89UinLo3YKx4dAA4Ksxcnop1Y9EnZ0jY/ojp3mopoSRDCg="

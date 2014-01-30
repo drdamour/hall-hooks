@@ -33,7 +33,7 @@ trait TravisController {
     val hallMessage = HallMessage(
       roomToken,
       payload.repository.name + " project build status",
-      s"Build Number ${payload.number} finished with ${payload.status_message}",
+      s"""<a target="_blank" href="${payload.build_url}">Build ${payload.number}</a> for branch <a target="_blank" href="${payload.repository.url}/${payload.branch}" >${payload.branch}</a> completed with status <b>${payload.status_message.toUpperCase}</b> (<a target="_blank" href="${payload.compare_url}">${payload.commit.substring(0, 6)}</a> by ${payload.committer_name})""",
       None
     )
 
@@ -46,55 +46,86 @@ trait TravisController {
   val examplePayload =
     """
       |{
-      |  "id": 1,
-      |  "number": 1,
-      |  "status": null,
-      |  "started_at": null,
-      |  "finished_at": null,
-      |  "status_message": "Passed",
-      |  "commit": "62aae5f70ceee39123ef",
-      |  "branch": "master",
-      |  "message": "the commit message",
-      |  "compare_url": "https://github.com/svenfuchs/minimal/compare/master...develop",
-      |  "committed_at": "2011-11-11T11: 11: 11Z",
-      |  "committer_name": "Sven Fuchs",
-      |  "committer_email": "svenfuchs@artweb-design.de",
-      |  "author_name": "Sven Fuchs",
-      |  "author_email": "svenfuchs@artweb-design.de",
-      |  "repository": {
-      |    "id": 1,
-      |    "name": "minimal",
-      |    "owner_name": "svenfuchs",
-      |    "url": "http://github.com/svenfuchs/minimal"
-      |  },
-      |  "matrix": [
-      |    {
-      |      "id": 2,
-      |      "repository_id": 1,
-      |      "number": "1.1",
-      |      "state": "created",
-      |      "started_at": null,
-      |      "finished_at": null,
-      |      "config": {
+      |    "id": 17922525,
+      |    "repository": {
+      |        "id": 1825929,
+      |        "name": "hall-hooks",
+      |        "owner_name": "drdamour",
+      |        "url": "https://github.com/drdamour/hall-hooks"
+      |    },
+      |    "number": "13",
+      |    "config": {
+      |        "language": "scala",
+      |        "scala": [
+      |            "2.10.3"
+      |        ],
+      |        "deploy": {
+      |            "provider": "heroku",
+      |            "api_key": {
+      |                "secure": "hUxppngfpBsAl0jafG0GF4Z6O92spf0GraQ7rc68VJUC6qS4anXNMu6mO2Bu4qGtoCm4Z+LE="
+      |            },
+      |            "app": "hall-hooks",
+      |            "true": {
+      |                "repo": "drdamour/hall-hooks"
+      |            }
+      |        },
       |        "notifications": {
-      |          "webhooks": ["http://evome.fr/notifications", "http://example.com/"]
+      |            "webhooks": [
+      |                "https://hall-hooks.herokuapp.com/travis-ci/buildnotification/"
+      |            ]
+      |        },
+      |        ".result": "configured"
+      |    },
+      |    "status": 0,
+      |    "result": 0,
+      |    "status_message": "Passed",
+      |    "result_message": "Passed",
+      |    "started_at": "2014-01-30T17:52:32Z",
+      |    "finished_at": "2014-01-30T18:09:02Z",
+      |    "duration": 990,
+      |    "build_url": "https://travis-ci.org/drdamour/hall-hooks/builds/17922525",
+      |    "commit": "89df55e2cee1393d08790a291a59ee1055ed3547",
+      |    "branch": "master",
+      |    "message": "Fixed examples",
+      |    "compare_url": "https://github.com/drdamour/hall-hooks/compare/544ce058621d...89df55e2cee1",
+      |    "committed_at": "2014-01-30T17:49:37Z",
+      |    "author_name": "drdamour",
+      |    "author_email": "drdamour@gmail.com",
+      |    "committer_name": "drdamour",
+      |    "committer_email": "drdamour@gmail.com",
+      |    "matrix": [
+      |        {
+      |            "id": 17922526,
+      |            "repository_id": 1825929,
+      |            "parent_id": 17922525,
+      |            "number": "13.1",
+      |            "state": "finished",
+      |            "config": {
+      |                "language": "scala",
+      |                "scala": "2.10.3",
+      |                "notifications": {
+      |                    "webhooks": [
+      |                        "https://hall-hooks.herokuapp.com/travis-ci/buildnotification/"
+      |                    ]
+      |                },
+      |                ".result": "configured",
+      |                "addons": {}
+      |            },
+      |            "status": null,
+      |            "result": null,
+      |            "commit": "89df55e2cee1393d08790a291a59ee1055ed3547",
+      |            "branch": "master",
+      |            "message": "Fixed examples",
+      |            "compare_url": "https://github.com/drdamour/hall-hooks/compare/544ce058621d...89df55e2cee1",
+      |            "committed_at": "2014-01-30T17:49:37Z",
+      |            "author_name": "drdamour",
+      |            "author_email": "drdamour@gmail.com",
+      |            "committer_name": "drdamour",
+      |            "committer_email": "drdamour@gmail.com",
+      |            "finished_at": "2014-01-30T18:09:02Z"
       |        }
-      |      },
-      |      "status": null,
-      |      "log": "",
-      |      "result": null,
-      |      "parent_id": 1,
-      |      "commit": "62aae5f70ceee39123ef",
-      |      "branch": "master",
-      |      "message": "the commit message",
-      |      "committed_at": "2011-11-11T11: 11: 11Z",
-      |      "committer_name": "Sven Fuchs",
-      |      "committer_email": "svenfuchs@artweb-design.de",
-      |      "author_name": "Sven Fuchs",
-      |      "author_email": "svenfuchs@artweb-design.de",
-      |      "compare_url": "https://github.com/svenfuchs/minimal/compare/master...develop"
-      |    }
-      |  ]
+      |    ],
+      |    "type": "push"
       |}
     """.stripMargin
 
