@@ -8,14 +8,15 @@ import play.api.libs.json.Json
 import models.Travis.BuildMessage
 import models.HallMessage
 import play.api.i18n.Messages
-import play.api.Logger;
+import play.api.Logger
+import play.api.libs.concurrent.Execution.Implicits._
 
 case class TravisSimulation(request:String)
 
 trait TravisController {
   this:Controller with HallCommandHandlerSlice =>
 
-  def sendBuildStatusToHall(roomToken:String) = Action { implicit request =>
+  def sendBuildStatusToHall(roomToken:String) = Action.async { implicit request =>
 
     //Get payload param
     val payloadJSON = request.body.asFormUrlEncoded.get("payload").head
@@ -30,16 +31,26 @@ trait TravisController {
     val payload = Json.fromJson[BuildMessage](json).get
 
     //figure out what we want our message to be
+    val messageText = payload match {
+      case p if p.status_message.toLowerCase == "pending" => s"""<a target="_blank" href="${payload.build_url}">Build ${payload.number}</a> for branch <a target="_blank" href="${payload.repository.url}/${payload.branch}" >${payload.branch}</a> <b>started</b> (<a target="_blank" href="${payload.compare_url}">${payload.commit.substring(0, 6)}</a> by ${payload.committer_name})"""
+      case _ => s"""<a target="_blank" href="${payload.build_url}">Build ${payload.number}</a> for branch <a target="_blank" href="${payload.repository.url}/${payload.branch}" >${payload.branch}</a> completed with status <b>${payload.status_message.toUpperCase}</b> (<a target="_blank" href="${payload.compare_url}">${payload.commit.substring(0, 6)}</a> by ${payload.committer_name})"""
+    }
+
     val hallMessage = HallMessage(
       roomToken,
       payload.repository.name + " project build status",
-      s"""<a target="_blank" href="${payload.build_url}">Build ${payload.number}</a> for branch <a target="_blank" href="${payload.repository.url}/${payload.branch}" >${payload.branch}</a> completed with status <b>${payload.status_message.toUpperCase}</b> (<a target="_blank" href="${payload.compare_url}">${payload.commit.substring(0, 6)}</a> by ${payload.committer_name})""",
+      messageText,
       None
     )
 
-    sendMessage(hallMessage)
+    sendMessage(hallMessage).map { response =>
+      Redirect(routes.TravisController.index()).flashing("success-message" -> Messages("notification.messageSentSuccessfully"))
+    }.recover {
+      case e: Exception =>
+        BadRequest(e.getLocalizedMessage)
+    }
 
-    Redirect(routes.TravisController.index()).flashing("success-message" -> Messages("notification.messageSentSuccessfully"))
+
   }
 
   //originally ripped from https://gist.github.com/svenfuchs/1225015 but i found diff form what was really happening, so this
