@@ -8,6 +8,7 @@ import play.api.libs.json.Json
 import models.Travis.BuildMessage
 import models.HallMessage
 import play.api.i18n.Messages
+import play.api.Logger;
 
 case class TravisSimulation(request:String)
 
@@ -15,8 +16,15 @@ trait TravisController {
   this:Controller with HallCommandHandlerSlice =>
 
   def sendBuildStatusToHall(roomToken:String) = Action { implicit request =>
+
+    //Get payload param
+    val payload = request.body.asFormUrlEncoded.get("payload").head
+
+    //Log the payload message
+    Logger("application.controllers.TravisController").debug(payload)
+
     //Get the json from the form body
-    val json = Json.parse(request.body.asFormUrlEncoded.get("payload").head)
+    val json = Json.parse(payload)
 
     //turn it into the much beloved case classes
     val o = Json.fromJson[BuildMessage](json).get
@@ -25,7 +33,7 @@ trait TravisController {
     val hallMessage = HallMessage(
       roomToken,
       o.payload.repository.name + " project build status",
-      s"Build Number ${o.payload.number} fininshed with ${o.payload.status_message}",
+      s"Build Number ${o.payload.number} finished with ${o.payload.status_message}",
       None
     )
 

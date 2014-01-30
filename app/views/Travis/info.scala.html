@@ -1,4 +1,4 @@
-@(testForm:Form[TravisSimulation])(implicit flash: play.api.mvc.Flash, lang: Lang)
+@(simulationForm:Form[TravisSimulation])(implicit flash: play.api.mvc.Flash, lang: Lang)
 
 @import twirl.pimpForPlay._
 @import views.html.helper._
@@ -7,9 +7,9 @@
 @template(Messages("pageTitle.travisInfo")) {
     <h1>Instructions</h1>
 
-    <h1>@Messages("label.travisTestForm.header")</h1>
+    <h1>@Messages("label.travisSimulationForm.header")</h1>
     @form(routes.TravisController.sendBuildStatusToHall("d982d854ba875b1a5229c0649ad4781e")){
-        @textarea(testForm("payload"), '_label -> Messages("label.travisTestForm.payload"), '_showConstraints -> false, 'rows -> 30)
+        @textarea(simulationForm("payload"), '_label -> Messages("label.travisSimulationForm.payload"), '_showConstraints -> false, 'rows -> 30)
 
         <div class="actions">
             <input type="submit" value="Simulate Build Notification" class="btn btn-primary">

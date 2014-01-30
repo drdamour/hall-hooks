@@ -12,8 +12,8 @@ label.testForm.title=Title:
 label.testForm.message=Message:
 label.testForm.picture=Picture:
 
-label.travisTestForm.header=Simulate a Travis-CI Build Notification
-label.travisTestForm.payload=Payload
+label.travisSimulationForm.header=Simulate a Travis-CI Build Notification
+label.travisSimulationForm.payload=Payload
 
 notification.messageSentSuccessfully=Message Sent to Hall
 notification.messageFailedToSend=Failed to send message to Hall
