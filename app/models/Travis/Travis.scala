@@ -15,7 +15,7 @@ object Repository {
   implicit val repositoryFormat = Json.format[Repository]
 }
 
-case class BuildMessagePayload(
+case class BuildMessage(
   id: Int,
   number: Int,
   status: Option[String], //what is this?
@@ -34,18 +34,9 @@ case class BuildMessagePayload(
   repository: Repository
 )
 
-object BuildMessagePayload {
-  //Note this has to be after the Repository companion object as this needs the implicit defined in there
-  implicit val payloadFormat = Json.format[BuildMessagePayload]
-}
-
-case class BuildMessage(
-  payload:BuildMessagePayload
-)
-
 object BuildMessage {
-  //Note this has to be after the BuildMessagePayload companion object as this needs the implicit defined in there
-  implicit val buildMessageFormat = Json.format[BuildMessage]
+  //Note this has to be after the Repository companion object as this needs the implicit defined in there
+  implicit val payloadFormat = Json.format[BuildMessage]
 }
 
 
