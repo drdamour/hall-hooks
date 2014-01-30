@@ -7,7 +7,7 @@ A web service for relaying various web hooks to hall.  You can use the deployed 
 
 Travis-CI Integration
 ==============================
-Go to https://hall.com/docs/integrations/generic/ and get the room token that you wish to notify.  Supposed it's 1234roomtoken.  Then add the following configuration to your .travis.yml file:
+Go to https://hall.com/docs/integrations/generic/ and get the room token that you wish to notify.  For this example suppose your token is 1234roomtoken.  Next, add the following configuration to your .travis.yml file:
 
 ```
 notifications:
@@ -17,7 +17,7 @@ notifications:
     on_start: true
 ```
 
-You can use the travis CLI tool to encrypt the url if you don't want to publish your room token (Hall hooks won't remember it)
+Note: You can use the travis CLI tool to encrypt the url if you don't want to publish your room token (Hall hooks won't remember it)
 
 ```
 travis encrypt https://hall-hooks.herokuapp.com/travis-ci/travis-ci/buildnotification/1234roomtoken
@@ -31,3 +31,4 @@ notifications:
       - secure: ecryptedgobblygookFdEd857iwZpN2PAFMsNBAZQdcU9bu
     on_start: true
 ```
+Modify the hook configuration per http://docs.travis-ci.com/user/notifications/#Webhook-notification you can send notes to multiple rooms by adding multiple urls to the urls section.
