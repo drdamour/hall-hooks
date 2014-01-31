@@ -46,14 +46,14 @@ trait TravisController {
     }.recover {
       case e: Exception =>
         BadRequest(e.getLocalizedMessage)
-    }  
-    
-  }
-  
-  def sendBuildStatusToHall(roomToken:String) = Action.async { implicit request =>
-    //TODO: add some verification against stuff being present or not
+    }
 
-    //Get payload param
+  }
+
+  def sendBuildStatusToHall(roomToken:String) = Action.async { implicit request =>
+  //TODO: add some verification against stuff being present or not
+
+  //Get payload param
     val payloadJSON = request.body.asFormUrlEncoded.get("payload").head
 
     //Log the payload message
