@@ -27,11 +27,17 @@ trait TravisController {
     //turn it into the much beloved case classes
     val payload = Json.fromJson[BuildMessage](json).get
 
+    //Figure out if this is a branch or a pull request
+    val codeSource = payload match{
+      case p if p.pull_request_number.isDefined => s"""<a target="_blank" href="${p.compare_url}">Pull Request ${p.pull_request_number.get}</a>"""
+      case p => s"""branch <a target="_blank" href="${p.repository.url}/${p.branch}" >${p.branch}</a>"""
+    }
+
     //figure out what we want our message to be
     val messageText = payload match {
       //TODO: is there a better way to match based on a single property of a case class?
-      case p if p.status_message.toLowerCase == "pending" => s"""<a target="_blank" href="${payload.build_url}">Build ${payload.number}</a> for branch <a target="_blank" href="${payload.repository.url}/${payload.branch}" >${payload.branch}</a> <b>started</b> (<a target="_blank" href="${payload.compare_url}">${payload.commit.substring(0, 6)}</a> by ${payload.committer_name})"""
-      case _ => s"""<a target="_blank" href="${payload.build_url}">Build ${payload.number}</a> for branch <a target="_blank" href="${payload.repository.url}/${payload.branch}" >${payload.branch}</a> completed with status <b>${payload.status_message.toUpperCase}</b> (<a target="_blank" href="${payload.compare_url}">${payload.commit.substring(0, 6)}</a> by ${payload.committer_name})"""
+      case p if p.status_message.toLowerCase == "pending" => s"""<a target="_blank" href="${p.build_url}">Build ${p.number}</a> for $codeSource <b>started</b> (<a target="_blank" href="${p.compare_url}">${p.commit.substring(0, 6)}</a> by ${p.committer_name})"""
+      case p => s"""<a target="_blank" href="${p.build_url}">Build ${p.number}</a> for $codeSource completed with status <b>${p.status_message.toUpperCase}</b> (<a target="_blank" href="${p.compare_url}">${p.commit.substring(0, 6)}</a> by ${p.committer_name})"""
     }
 
     val hallMessage = HallMessage(
@@ -158,7 +164,9 @@ trait TravisController {
   )
 
   def index = Action { implicit request =>
-    Ok(views.html.Travis.info(travisSimulationForm.fill(TravisSimulation("", examplePayload))))
+    Ok(views.html.Travis.info(travisSimulationForm.copy( data = Map("payload" -> examplePayload))))
+
+    //Ok(views.html.Travis.info(travisSimulationForm.fill(TravisSimulation("", examplePayload))))
   }
 
   def runSimulation = Action.async { implicit request =>

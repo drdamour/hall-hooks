@@ -32,7 +32,9 @@ case class BuildMessage(
   author_name: String,
   author_email: String,
   build_url: String,
-  repository: Repository
+  repository: Repository,
+  pull_request_number: Option[Int]
+
 )
 
 object BuildMessage {
