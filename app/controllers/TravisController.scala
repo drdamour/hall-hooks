@@ -36,8 +36,8 @@ trait TravisController {
     //figure out what we want our message to be
     val messageText = payload match {
       //TODO: is there a better way to match based on a single property of a case class?
-      case p if p.status_message.toLowerCase == "pending" => s"""<a target="_blank" href="${p.build_url}">Build ${p.number}</a> for $codeSource <b>started</b> (<a target="_blank" href="${p.compare_url}">${p.commit.substring(0, 6)}</a> by ${p.committer_name})"""
-      case p => s"""<a target="_blank" href="${p.build_url}">Build ${p.number}</a> for $codeSource completed with status <b>${p.status_message.toUpperCase}</b> (<a target="_blank" href="${p.compare_url}">${p.commit.substring(0, 6)}</a> by ${p.committer_name})"""
+      case p if p.status_message.toLowerCase == "pending" => s"""<a target="_blank" href="${p.build_url}">Build ${p.number}</a> for $codeSource <b>started</b> (<a target="_blank" href="${p.compare_url}">${p.commit.substring(0, 6)}</a> by ${p.committer_name} - ${p.message})"""
+      case p => s"""<a target="_blank" href="${p.build_url}">Build ${p.number}</a> for $codeSource completed with status <b>${p.status_message.toUpperCase}</b> (<a target="_blank" href="${p.compare_url}">${p.commit.substring(0, 6)}</a> by ${p.committer_name} - ${p.message})"""
     }
 
     val hallMessage = HallMessage(
