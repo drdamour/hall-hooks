@@ -30,7 +30,7 @@ trait TravisController {
     //Figure out if this is a branch or a pull request
     val codeSource = payload match{
       case p if p.pull_request_number.isDefined => s"""<a target="_blank" href="${p.compare_url}">Pull Request ${p.pull_request_number.get}</a>"""
-      case p => s"""branch <a target="_blank" href="${p.repository.url}/${p.branch}" >${p.branch}</a>"""
+      case p => s"""branch <a target="_blank" href="${p.repository.url}/tree/${p.branch}" >${p.branch}</a>"""
     }
 
     //figure out what we want our message to be
