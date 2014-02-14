@@ -1,4 +1,6 @@
-name := "hall-web-hook-integrations"
+import CoverallsPlugin.CoverallsKeys._
+
+name := "hall-hooks"
 
 version := "1.0-SNAPSHOT"
 
@@ -8,7 +10,6 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  cache,
   //Testing
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   //WebJars
@@ -21,3 +22,6 @@ libraryDependencies ++= Seq(
 )     
 
 play.Project.playScalaSettings
+
+//Coveralls settings: https://github.com/theon/xsbt-coveralls-plugin
+seq(CoverallsPlugin.singleProject: _*)

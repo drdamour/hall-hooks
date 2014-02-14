@@ -1,6 +1,7 @@
 language: scala
+script: sbt coveralls
 scala:
-  - 2.10.3
+- 2.10.3
 deploy:
   provider: heroku
   api_key:
@@ -11,5 +12,8 @@ deploy:
 notifications:
   webhooks:
     urls:
-      - secure: "FdEd857iwZpN2PAFMsNBAZQdcU9buDHdiartFQA1wL08PPvee4xHHWefOuUS5Qr5QFt6n5ZzdUv7lYVr6eAQuBB7j+irMT7tvaRCf2k5Qg9qBP065CJrI5YzcLvjr89UinLo3YKx4dAA4Ksxcnop1Y9EnZ0jY/ojp3mopoSRDCg="
+    - secure: FdEd857iwZpN2PAFMsNBAZQdcU9buDHdiartFQA1wL08PPvee4xHHWefOuUS5Qr5QFt6n5ZzdUv7lYVr6eAQuBB7j+irMT7tvaRCf2k5Qg9qBP065CJrI5YzcLvjr89UinLo3YKx4dAA4Ksxcnop1Y9EnZ0jY/ojp3mopoSRDCg=
     on_start: true
+env:
+  matrix:
+    secure: D+/J3OF5ZxcrDSU5rvbvKeCMkxskgPD8culXpQJhSWbqyzJtufl5rBSGdsASGne8e/bnSDdihD29Qb9/IaxHR39vY5humgu0YncDfG/x33A3UVlCLQvLobVEvzkofhvDDJZQlBzZXnnWw+Xnhfdp/wrkLPrh+mLEA3AprvkWDaw=
