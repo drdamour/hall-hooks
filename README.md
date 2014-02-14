@@ -1,4 +1,5 @@
 Master [![Build Status](https://travis-ci.org/drdamour/hall-hooks.png?branch=master)](https://travis-ci.org/drdamour/hall-hooks)
+[![Coverage Status](https://coveralls.io/repos/drdamour/hall-hooks/badge.png)](https://coveralls.io/r/drdamour/hall-hooks)
 
 Hall.com Web Hook Integrations
 ==============================
