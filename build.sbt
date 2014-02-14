@@ -1,5 +1,3 @@
-import CoverallsPlugin.CoverallsKeys._
-
 name := "hall-hooks"
 
 version := "1.0-SNAPSHOT"
