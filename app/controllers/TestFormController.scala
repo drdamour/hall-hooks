@@ -7,15 +7,15 @@ import play.api.data.Forms._
 import play.api.i18n.Messages
 
 
-import play.api.libs.concurrent.Execution.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 import models._
 import hall._
 
 
-trait TestFormController {
-  this: Controller with HallCommandHandler =>
+trait TestFormController extends Controller {
+  this: HallCommandHandlerSlice =>
 
   val chatForm = Form(
     mapping(
@@ -38,7 +38,7 @@ trait TestFormController {
         Future(BadRequest(views.html.testform(badForm)))
       },
       validMessage => {
-        sendMessage(validMessage).map { response =>
+        hallCommandHandler.sendMessage(validMessage).map { response =>
           //TODO: any response other than success should be thrown down to recover
 
           Redirect(routes.TestFormController.index()).flashing("success-message" -> Messages("notification.messageSentSuccessfully"))
@@ -58,4 +58,6 @@ trait TestFormController {
 
 }
 
-object TestFormController extends Controller with TestFormController with HallCommandHandlerSlice
+object TestFormController extends TestFormController with HallCommandHandlerSlice {
+  val hallCommandHandler = new HallCommandHandler
+}

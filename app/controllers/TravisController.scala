@@ -9,15 +9,16 @@ import models.Travis.BuildMessage
 import models.HallMessage
 import play.api.i18n.Messages
 import play.api.Logger
-import play.api.libs.concurrent.Execution.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-case class TravisSimulation(roomToken:String, payload:String)
+case class TravisSimulation(roomToken:String, payload:String, ignoredStatuses:Option[String])
 
-trait TravisController {
-  this:Controller with HallCommandHandlerSlice =>
+trait TravisController extends Controller {
+  this: HallCommandHandlerSlice =>
 
-  private def doStuff(roomToken:String, payloadJSON:String) = {
+  private def doStuff(roomToken:String, payloadJSON:String, ignoredStatuses:String): Future[SimpleResult]  = {
+
     //Get the json from the form body
     val json = Json.parse(payloadJSON)
 
@@ -27,8 +28,11 @@ trait TravisController {
     //turn it into the much beloved case classes
     val payload = Json.fromJson[BuildMessage](json).get
 
+    //this feels wrong..but i don't know what you're supposed to do in scala for early exits
+    if (ignoredStatuses.toLowerCase.contains(payload.status_message.toLowerCase)) return Future(Redirect(routes.TravisController.index()).flashing("warning-message" -> Messages("notification.messageSkippedDueToIgnore", payload.status_message)))
+
     //Figure out if this is a branch or a pull request
-    val codeSource = payload match{
+    val codeSource = payload match {
       case p if p.pull_request_number.isDefined => s"""<a target="_blank" href="${p.compare_url}">Pull Request ${p.pull_request_number.get}</a>"""
       case p => s"""branch <a target="_blank" href="${p.repository.url}/tree/${p.branch}" >${p.branch}</a>"""
     }
@@ -47,7 +51,7 @@ trait TravisController {
       None
     )
 
-    sendMessage(hallMessage).map { response =>
+    hallCommandHandler.sendMessage(hallMessage).map { response =>
       Redirect(routes.TravisController.index()).flashing("success-message" -> Messages("notification.messageSentSuccessfully"))
     }.recover {
       case e: Exception =>
@@ -56,16 +60,16 @@ trait TravisController {
 
   }
 
-  def sendBuildStatusToHall(roomToken:String) = Action.async { implicit request =>
-  //TODO: add some verification against stuff being present or not
+  def sendBuildStatusToHall(roomToken:String, ignoredStatuses:String) = Action.async { implicit request =>
+    //TODO: add some verification against stuff being present or not
 
-  //Get payload param
+    //Get payload param
     val payloadJSON = request.body.asFormUrlEncoded.get("payload").head
 
     //Log the payload message
     Logger("application.controllers.TravisController").debug(payloadJSON)
 
-    doStuff(roomToken, payloadJSON)
+    doStuff(roomToken, payloadJSON, ignoredStatuses)
 
   }
 
@@ -159,14 +163,13 @@ trait TravisController {
   val travisSimulationForm = Form(
     mapping(
       "roomToken" -> nonEmptyText,
-      "payload" -> nonEmptyText
+      "payload" -> nonEmptyText,
+      "ignoredStatuses" -> optional(text)
     )(TravisSimulation.apply)(TravisSimulation.unapply)
   )
 
   def index = Action { implicit request =>
     Ok(views.html.Travis.info(travisSimulationForm.copy( data = Map("payload" -> examplePayload))))
-
-    //Ok(views.html.Travis.info(travisSimulationForm.fill(TravisSimulation("", examplePayload))))
   }
 
   def runSimulation = Action.async { implicit request =>
@@ -175,11 +178,13 @@ trait TravisController {
         Future(BadRequest(views.html.Travis.info(badForm)))
       },
       validSimulation => {
-        doStuff(validSimulation.roomToken, validSimulation.payload)
+        doStuff(validSimulation.roomToken, validSimulation.payload, validSimulation.ignoredStatuses.getOrElse(""))
       }
 
     )
   }
 }
 
-object TravisController extends Controller with TravisController with HallCommandHandlerSlice
+object TravisController extends TravisController with HallCommandHandlerSlice {
+  val hallCommandHandler = new HallCommandHandler
+}

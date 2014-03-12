@@ -18,4 +18,4 @@ POST        /                                               controllers.TestForm
 #travis-ci integration
 GET         /travis-ci                                      controllers.TravisController.index
 POST        /travis-ci/runsimulation                        controllers.TravisController.runSimulation
-POST        /travis-ci/buildnotification/:roomToken         controllers.TravisController.sendBuildStatusToHall(roomToken)
+POST        /travis-ci/buildnotification/:roomToken         controllers.TravisController.sendBuildStatusToHall(roomToken, ignoredStatuses ?= "")

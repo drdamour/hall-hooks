@@ -15,6 +15,8 @@ label.testForm.picture=Picture:
 label.travisSimulationForm.header=Simulate a Travis-CI Build Notification
 label.travisSimulationForm.payload=Payload
 label.travisSimulationForm.roomToken=Hall Room Token
+label.travisSimulationForm.ignoredStatuses=Statuses to ignore
 
 notification.messageSentSuccessfully=Message Sent to Hall
 notification.messageFailedToSend=Failed to send message to Hall
+notification.messageSkippedDueToIgnore=Message skipped because status {0} is ignored

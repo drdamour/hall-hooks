@@ -43,6 +43,10 @@
 			<p class="text-success">@message</p>
 		}
 
+        @flash.get("warning-message").map { message =>
+            <p class="text-warning">@message</p>
+        }
+
         @flash.get("failure-message").map { message =>
             <p class="text-danger">@message</p>
         }

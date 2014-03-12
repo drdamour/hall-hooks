@@ -35,6 +35,7 @@
     <h1>@Messages("label.travisSimulationForm.header")</h1>
     @form(routes.TravisController.runSimulation){
         @inputText(simulationForm("roomToken"), '_label -> Messages("label.travisSimulationForm.roomToken"), '_showConstraints -> false, 'rows -> 30)
+        @inputText(simulationForm("ignoredStatuses"), '_label -> Messages("label.travisSimulationForm.ignoredStatuses"), '_showConstraints -> false, 'rows -> 30)
         @textarea(simulationForm("payload"), '_label -> Messages("label.travisSimulationForm.payload"), '_showConstraints -> false, 'rows -> 30)
 
         <div class="actions">
