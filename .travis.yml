@@ -12,7 +12,7 @@ deploy:
 notifications:
   webhooks:
     urls:
-    - secure: FdEd857iwZpN2PAFMsNBAZQdcU9buDHdiartFQA1wL08PPvee4xHHWefOuUS5Qr5QFt6n5ZzdUv7lYVr6eAQuBB7j+irMT7tvaRCf2k5Qg9qBP065CJrI5YzcLvjr89UinLo3YKx4dAA4Ksxcnop1Y9EnZ0jY/ojp3mopoSRDCg=
+    - secure: iq80ADDx4b61yzEz4wx80p5CTF441K1ZZK4XssTr/7Nm+QG0mEG3Ri18qBTbqaix9ATV4boiv+oAlr7yh3cBEixnm2VH7zjCjbFeYtLFZNJRI7Dwj7Xyi1LOEa7D4EX90jHa/keaTqmlzm/WCXWZDsCDs0M7n9+Z+KzMWnF0MbE=
     on_start: true
 env:
   matrix:
